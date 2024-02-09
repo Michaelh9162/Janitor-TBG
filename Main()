@@ -1,0 +1,468 @@
+#include<iostream>
+#include<Windows.h>
+using namespace std;
+
+//Functions declarations
+void LootBox();
+void Nerd();
+void Shop();
+//Global variables
+int COIN = 0;
+int PlayerHealth = 50;
+void BattleSystem();
+void NurseBuy();
+void BattleSystem2();
+//put empty space in each inventory slot
+
+
+string inventory[6] = { " "," "," "," "," ", " " };
+
+
+
+int main() {
+	//ascii art
+	cout << "		  _____________   " << endl;
+	cout << "		 /      _      \  " << endl;
+	cout << "		 [] :: (_) :: []  " << endl;
+	cout << "		 [] ::::::::: []  " << endl;
+	cout << "		 [] ::::::::: []  " << endl;
+	cout << "		 [] ::::::::: []  " << endl;
+	cout << "		 [_____________]  " << endl;
+	cout << "		     I     I      " << endl;
+	cout << "		     I_   _I      " << endl;
+	cout << "		      /   \       " << endl;
+	cout << "		      \   /       " << endl;
+	cout << "	              (   )       " << endl;
+	cout << "		      /   \       " << endl;
+	cout << "                       \___/       " << endl;
+
+	string input = "z";
+	Beep(200, 800);
+	for (int i = 0; i < 5; i++)
+		inventory[i] = " ";
+	int room = 1;
+	int Janitor = 10;
+
+	while (PlayerHealth >= 0 && input != "q") {
+		//printing inventory 
+		for (int i = 0; i < 5; i++)
+			cout << inventory[i] << "";
+		cout << endl;
+
+		switch (room) {
+
+		case 1:
+			system("color 30");
+			Beep(500, 500);
+			cout << "You've entered the lobby of the school " << endl;
+			cout << " You're objective is to find the Janitor and get the key " << endl;
+			cout << "continue by pressing (e)ast" << endl;
+			cin >> input;
+			if (input == "e" || input == "E")
+				room = 2;
+			break;
+		case 2:
+			cout << "you're walking in the hallway, you can go (w)est or (e)ast." << endl;
+			cin >> input;
+			if (input == "w" || input == "W")
+				room = 1;
+			else if (input == "e" || input == "E")
+				room = 3;
+			break;
+		case 3:
+			LootBox();
+			cout << "(s)outh or (n)orth or (w)est" << endl;
+			cin >> input;
+			if (input == "n" || input == "N")
+				room = 4;
+			else if (input == "s" || input == "S")
+				room = 5;
+			else if (input == "s" || input == "S")
+				room = 2;
+			break;
+		case 4:
+			Shop();
+			cout << "you're in the auditorium, you can go (s)outh" << endl;
+			cin >> input;
+			if (input == "s" || input == "S")
+				room = 3;
+			else
+				cout << "that's not an option" << endl;
+			break;
+		case 5:
+			if (inventory[4] != "Key") {
+				cout << "YOU SEE THE JANITOR!! " << endl;
+				cout << "FIGHT HIM TO GET THE KEY" << endl;
+				BattleSystem();
+
+				if (PlayerHealth > 0) {
+					cout << "you defeated the Janitor, You have the key" << endl;
+					inventory[4] = "Key";
+				}
+				else
+					break; // if player health is zero of less game ends
+			}
+			cout << "you're in room 5, you can go (W)est (N)orth" << endl;
+			cin >> input;
+			if (input == "W" || input == "w")
+				room = 6;
+			else if (input == "N" || input == "n")
+				room = 4;
+			break;
+		case 6:
+			cout << "you're walk in the nurses office, you can go (s)outh or (n)orth" << endl;
+			NurseBuy();
+			cin >> input;
+			if (input == "s" || input == "S")
+				room = 7;
+			else if (input == "N" || input == "n")
+				room = 4;
+			break;
+		case 7:
+			cout << "you're in room cafeteria, you can go (s)outh or (w)est, (e)ast" << endl;
+			cout << "you can talk to the lunch Lady press (t) to talk" << endl;
+			cin >> input;
+			if (input == "t") {
+				cout << "I'm not letting you pass without getting lunch and I ain't making another lunch without my spatula!!!" << endl;
+				cout << "what do you do??" << endl;
+				cout << " Press (g)ive to give trade Spatula" << endl;
+				cout << "Press (A)ttack to attack with Lazer Pointer" << endl;
+				cout << "Press (E) to give Mystery Meat" << endl;
+				cin >> input;
+				if (input == "g" && inventory[0] == "Spatula") {
+					cout << "I have ur Spatula" << endl;
+					cout << "Lunch Lady : THANK YOU SO MUCH some stupid kid stole it from me " << endl;
+					cout << " Here's an apple for ur troubles" << endl;
+					inventory[6] = " ";
+					inventory[2] = "Apple";
+					room = 8;
+				}
+				else if (input == "A") {
+					cout << "You Shine the lazer into her eyes and run by" << endl;
+					room = 8;
+				}
+				else if (input == "E") {
+					cout << "I don't have your Spatula but I do have a meat for you" << endl;
+					cout << "Lunch Lady: I guess that will do, you can pass" << endl;
+					inventory[4] = "";
+					room = 8;
+				}
+				else
+					cout << "that's not an option" << endl;
+
+			}
+
+			cin >> input;
+			if (input == "n" || input == "N")
+				room = 6;
+			else if (input == "w" || input == "W")
+				room = 9;
+			break;
+		case 8:
+			Nerd();
+			cout << "you're in room gym , you can go (w)est" << endl;
+			cin >> input;
+			if (input == "w" || input == "W")
+				room = 9;
+			break;
+		case 9:
+			cout << "you're in room the East Hallway, you can go (s)outh or (e)ast" << endl;
+			cin >> input;
+			if (input == "S" || input == "s")
+				room = 10;
+			else if (input == "e" || input == "e")
+				room = 9;
+			break;
+		case 10:
+			cout << "You finaly made it" << endl;
+			cout << "- Oh NO - what's that it's the assiatant teacher" << endl;
+			cout << "you're gonna have to BATTLE THEM to get the answer sheet" << endl;
+			cout << "Press (F)ight to battle or (b)ribe them with a apple" << endl;
+			cin >> input;
+			if (input == "f" || input == "F")
+				BattleSystem2();
+			else if (input == "B" || input == "b") {
+				cout << "You gave them the apple" << endl;
+				inventory[2] = "";
+			}
+			if (inventory[4] == "key") {
+				cout << "you made it to the end!! HORRAY!" << endl;
+				input = "q";
+				break;
+
+			}
+		}//end of switch
+
+	}//end of loop
+}//end of main
+
+void BattleSystem2() {
+	string input;
+	int num = rand() % 100;
+	int MonsterHealth = 150;
+	while (PlayerHealth > 0 && MonsterHealth > 0) {
+		PlayerHealth -= 15;
+
+		cout << "you have ," << PlayerHealth << ",amount of HP " << endl;
+		cout << "what do you do (A)ttack,(H)eal, (R)un, (I)nventory? " << endl;
+		cin >> input;
+		if (input == "A" || input == "a") {
+			cout << "You're attack does 10 damage" << endl;
+			MonsterHealth -= 10;
+			if (MonsterHealth <= 0)
+				cout << "You deafeated the Boss" << endl;
+		}
+		else if (input == "h" || input == "H") {
+			if (inventory[5] == "Band-aid")
+				cout << "You heal 25 hp with the band-aid" << endl;
+			PlayerHealth += 25;
+			inventory[5] = "";
+		}
+		else if (inventory[2] == "ice pack") {
+			cout << "You heal 50 hp with the ice pack" << endl;
+			PlayerHealth += 50;
+			inventory[2] = "";
+		}
+
+		else if (input == "r" || input == "R")
+			if (num < 50)
+				cout << "You ran away" << endl;
+			else
+				cout << "He caught you " << endl;
+
+		else if (input == "i" || input == "I")
+			cout << inventory << endl;
+		else
+			cout << "that's not an option" << endl;
+	}//end of mini loop
+}//end of function
+
+
+
+
+void LootBox() {
+	string input;
+	int num = 0;
+	cout << "do you want to search the Lost & Found" << endl;
+	cout << "(Y)es or (N)o" << endl;
+	cin >> input;
+	srand(time(NULL));
+	if (input == "Y" || input == "y")
+		num = rand() % 100;
+
+	if (num < 25) {
+		cout << "You found 15 coins" << endl;
+		COIN += 15;
+	}
+	else if (num < 50) {
+		cout << "You found WATER BOTTLE" << endl;
+		inventory[3] = "Water Bottle";
+	}
+	else if (num < 75) {
+		cout << "Spatula" << endl;
+		inventory[6] = "Spatula";
+	}
+	else if (num < 95) {
+		cout << "5 coins" << endl;
+		COIN += 5;
+	}
+	else
+		cout << "you found nothing loser" << endl;
+
+
+
+
+}
+void Nerd() {
+	string input;
+	cout << "Hello there!!, I'm the NERD." << endl;
+	cout << "Press E to interact" << endl;
+	cin >> input;
+	srand(time(NULL));
+	int num = 0;
+	if (input == "E")
+		num = rand() % 100;
+	if (num < 20)
+		cout << "FUN FACT!! The mississippi River was descovered on may 8th 1541." << endl;
+	else if (num < 50)
+		cout << "BLAH BLAH BLAH" << endl;
+	else if (num < 75)
+		cout << "YAP YAP YAP" << endl;
+	else if (num < 80)
+		cout << "Never trust an atom they make everything up HAHHAHAHAHA" << endl;
+	else if (num < 95)
+		cout << "what did the atom say  to the other atom when it lost an electron?!(w)hat? press w to continue" << endl;
+	else if (input == "w" || input == "W")
+		cout << "Are you positive HEHEHEHE" << endl;
+	else
+		cout << "Ok bye" << endl;
+
+}
+void Shop() {
+	char input;
+	cout << "Yo, I'm the plug what do you want to purchase?" << endl;
+	cout << "you have ," << COIN << " amount of coins" << endl;
+	cout << "1) Spatula for 5 coins" << endl;
+	cout << "2) Lazer pointer for 5 coins" << endl;
+	cout << "3) Skateboard 10 for coins" << endl;
+	cout << "4) Mysterious bag for 5 coins" << endl;
+	cout << "5) Mystery meat for 10 coins " << endl;
+	cout << "enter (q) to quit." << endl;
+	cin >> input;
+	switch (input) {
+	case '1':
+		if (COIN >= 5) {
+			inventory[0] = "Spatula";
+			cout << "you bought a Spatula" << endl;
+			COIN -= 5;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+		break;
+	case '2':
+		if (COIN >= 5) {
+			inventory[1] = "Lazer pointer";
+			cout << "you bought a Lazer pointer" << endl;
+			COIN -= 5;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+		break;
+	case '3':
+		if (COIN >= 5) {
+			inventory[2] = "Skateboard";
+			cout << "you bought a Skateboard" << endl;
+			COIN -= 10;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+		break;
+	case '4':
+		if (COIN >= 5) {
+			inventory[3] = "Mysterious Bag";
+			cout << "you bought a Mysterious Bag" << endl;
+			COIN -= 5;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+		break;
+	case '5':
+		if (COIN >= 5) {
+			inventory[4] = "Mystery Meat";
+			cout << "you bought a Mystery Meat" << endl;
+			COIN -= 5;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+
+		cout << "Plug: pleasure doing business" << endl;
+		cout << "you have " << COIN << "amount of COINS" << endl;
+		break;
+	}
+
+}
+void BattleSystem() {
+	string input;
+	int num = rand() % 100;
+	int MonsterHealth = 30;
+	while (PlayerHealth > 0 && MonsterHealth > 0) {
+		PlayerHealth -= 15;
+
+		cout << "you have ," << PlayerHealth << ",amount of HP " << endl;
+		cout << "what do you do (A)ttack,(H)eal, (R)un, (I)nventory? " << endl;
+		cin >> input;
+		if (input == "A" || input == "a") {
+			cout << "You're attack does 10 damage" << endl;
+			MonsterHealth -= 10;
+			if (MonsterHealth <= 0)
+				COIN += 10;
+			inventory[4] = "Key";
+			cout << "you gained 10 COINS" << endl;
+		}
+		else if (input == "h" || input == "H") {
+			if (inventory[5] == "Band-aid") {
+				cout << "You heal 25 hp with the band-aid" << endl;
+				PlayerHealth += 25;
+				inventory[5] = "";
+			}
+			else if (inventory[2] == "ice pack") {
+				cout << "You heal 50 hp with the ice pack" << endl;
+				PlayerHealth += 50;
+				inventory[2] = "";
+			}
+		}
+		else if (input == "r" || input == "R") {
+			if (num < 50)
+				cout << "You ran away" << endl;
+			else
+				cout << "He caught you " << endl;
+		}
+		else if (input == "i" || input == "I")
+			cout << inventory << endl;
+		else
+			cout << "that's not an option" << endl;
+
+	}
+}
+
+
+
+
+void NurseBuy() {
+	char input;
+	PlayerHealth += 100;
+	cout << "Hi, I'm the nurse what can I help you with." << endl;
+	cout << "you have ," << COIN << " amount of coins" << endl;
+	cout << "1) Band-aid for 5 coins" << endl;
+	cout << "2) Ice pack for 5 coins" << endl;
+	cout << "3) cough medicine 5 for coins" << endl;
+	cout << "4) Water Bottle for 5 coins" << endl;
+	cout << "enter (q) to quit." << endl;
+	cin >> input;
+	switch (input) {
+	case '1':
+		if (COIN >= 5) {
+			inventory[5] = "Band-aid";
+			cout << "you bought a band-aid" << endl;
+			COIN -= 5;
+		}
+		else
+			cout << "Stop talking to me BROOKIE	" << endl;
+		break;
+	case '2':
+		if (COIN >= 5) {
+			inventory[1] = "Ice Pack";
+			cout << "you bought a Ice Pack" << endl;
+			COIN -= 5;
+		}
+		else {
+			cout << "Stop talking to me BROOKIE	" << endl;
+			break;
+		}
+	case '3':
+		if (COIN >= 5) {
+			inventory[3] = "Cough Medcine";
+			cout << "you bought a Cough Medcine" << endl;
+			COIN -= 10;
+		}
+		else {
+			cout << "Stop talking to me BROOKIE	" << endl;
+			break;
+		}
+	case '4':
+		if (COIN >= 5) {
+			inventory[3] = "Water Bottle";
+			cout << "you bought a Water Bottle" << endl;
+			COIN -= 10;
+		}
+		else {
+			cout << "Stop talking to me BROOKIE	" << endl;
+			break;
+
+		}
+
+	}
+
+
+
+}
